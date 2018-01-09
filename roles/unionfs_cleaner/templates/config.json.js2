@@ -1,5 +1,5 @@
 {
-    "cloud_folder": "/mnt/.local_decrypt",
+    "cloud_folder": "/mnt/local_decrypt",
     "dry_run": false,
     "du_excludes": ["*.partial~"],
     "local_folder": "/mnt/local/Media",

@@ -73,6 +73,8 @@
 - name: Create common directories
   file: "path={{item}} state=directory mode=0775 owner={{user}} group={{user}}"
   with_items:
+    - /mnt/local_decrypt
+    - /mnt/local_final
     - /mnt/local
     - /mnt/local/.unionfs-fuse
     - /mnt/local/Media/TV
