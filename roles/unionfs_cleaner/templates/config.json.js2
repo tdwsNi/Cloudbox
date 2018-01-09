@@ -1,11 +1,11 @@
 {
-    "cloud_folder": "/mnt/plexdrive",
+    "cloud_folder": "/mnt/.local_decrypt",
     "dry_run": false,
     "du_excludes": ["*.partial~"],
     "local_folder": "/mnt/local/Media",
     "local_folder_check_interval": {{unionfs_cleaner.size_check_mins}},
     "local_folder_size": {{unionfs_cleaner.max_local_gigabytes}},
-    "local_remote": "{{unionfs_cleaner.rclone_remote}}/Media",
+    "local_remote": "{{unionfs_cleaner.rclone_local_final}}/Media",
     "lsof_excludes": [
         ".partial~"
     ],
@@ -25,7 +25,7 @@
         "/mnt/local/Media/TV": 1
     },
     "rclone_transfers": 8,
-    "remote_folder": "{{unionfs_cleaner.rclone_remote}}",
+    "remote_folder": "{{unionfs_cleaner.rclone_local_final}}",
     "unionfs_folder": "/mnt/local/.unionfs-fuse",
     "use_config_manager": true,
     "use_git_autoupdater": true,
