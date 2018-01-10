@@ -64,6 +64,25 @@
     state: link
     force: yes
 
+- name: Check service exists
+  stat:
+    path: "/etc/systemd/system/rclone.service"
+  register: rclone_service
+
+- name: Stop existing rclone service
+  systemd: state=stopped name=plexdrive
+  when: rclone_service.stat.exists
+
+- name: Import rclone.service
+  template:
+    src: rclone.service.js2
+    dest: /etc/systemd/system/rclone.service
+    force: yes
+  when: rclone_service.stat.exists == False
+
+- name: Systemd daemon-reload
+  systemd: state=stopped name=rclone daemon_reload=yes enabled=no
+
 - name: Check restore rclone.conf exists
   stat:
     path: "{{playbook_dir}}/rclone.conf"
@@ -82,4 +101,8 @@
   file:
     path: "{{playbook_dir}}/rclone.conf"
     state: absent
+  when: restore_rclone_conf.stat.exists
+
+- name: Start rclone service
+  systemd: state=started name=rclone enabled=yes
   when: restore_rclone_conf.stat.exists

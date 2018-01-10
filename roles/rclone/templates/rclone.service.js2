@@ -1,0 +1,18 @@
+# /etc/systemd/system/rclone.service
+
+[Unit]
+Description=RClone
+After=multi-user.target
+
+[Service]
+User={{user}}
+Group={{user}}
+Type=simple
+ExecStart=/opt/rclone/rclone mount --read-only --allow-non-empty --allow-other --buffer-size 500M --checkers 16 --max-read-ahead 30G --vfs-cache-mode off --dir-cache-time 1m gdcrypt: /mnt/local_decrypt
+KillMode=process
+RemainAfterExit=yes
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target

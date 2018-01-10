@@ -104,6 +104,21 @@
     recurse: true
   when: plexdrive_mnt.stat.exists == False
 
+- name: Check local_decrypt folder exist
+  stat:
+    path: /mnt/local_decrypt
+  register: local_decrypt_mnt
+
+- name: Create /mnt/local_decrypt
+  file:
+    path: /mnt/local_decrypt
+    state: directory
+    mode: 0755
+    owner: "{{user}}"
+    group: "{{user}}"
+    recurse: true
+  when: local_decrypt_mnt.stat.exists == False
+
 - name: Set /opt permissions
   shell: "chmod -R 775 /opt"
 
