@@ -55,6 +55,11 @@
   shell: mandb
   changed_when: false
 
+- name: Check rclone.conf exists
+  stat:
+    path: "/home/{{user}}/.config/rclone/rclone.conf"
+  register: rclone_conf
+
 - name: Symlink config
   file:
     src: /opt/rclone/rclone.conf
@@ -63,6 +68,7 @@
     group: "{{user}}"
     state: link
     force: yes
+  when: rclone_conf.stat.exists == False
 
 - name: Check service exists
   stat:
