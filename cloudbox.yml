@@ -18,7 +18,6 @@
     - { role: scripts, tags: ['full', 'feeder', 'plex'] }
     - { role: unionfs_cleaner, tags: ['full', 'feeder']}
     - { role: nzbget, tags: ['full', 'feeder', 'update-nzbget'] }
-    - { role: rutorrent, tags: ['full', 'feeder', 'update-rutorrent'] }
     - { role: jackett, tags: ['full', 'feeder', 'update-jackett'] }
     - { role: nzbhydra, tags: ['full', 'feeder', 'update-nzbhydra'] }
     - { role: sonarr, tags: ['full', 'feeder', 'update-sonarr'] }

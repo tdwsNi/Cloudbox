@@ -5,9 +5,6 @@
   email: your@email.com
   nzbget:
     downloads: "/home/{{user}}/downloads/nzbget"
-  rutorrent:
-    passwd: password321
-    downloads: "/home/{{user}}/downloads/rutorrent"
   deluge:
     vpn_enabled: yes
     vpn_provider: pia

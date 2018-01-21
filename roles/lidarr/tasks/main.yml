@@ -11,7 +11,7 @@
   docker_container:
     name: lidarr
     state: absent
-    
+
 - name: Create lidarr directories
   file: "path={{item}} state=directory mode=0775 owner={{user}} group={{user}}"
   with_items:
@@ -41,7 +41,7 @@
       - "/opt/lidarr:/config"
       - "/mnt/local/Media/Music:/music"
       - "{{nzbget.downloads}}:/downloads/nzbget"
-      - "{{rutorrent.downloads}}:/downloads/rutorrent"
+      - "{{deluge.downloads}}:/downloads/deluge"
       - "/mnt:/mnt"
       - "/opt/scripts:/scripts"
     networks:

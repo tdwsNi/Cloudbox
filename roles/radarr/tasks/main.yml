@@ -11,7 +11,7 @@
   docker_container:
     name: radarr
     state: absent
-    
+
 - name: Create radarr directories
   file: "path={{item}} state=directory mode=0775 owner={{user}} group={{user}}"
   with_items:
@@ -40,7 +40,7 @@
       - "/opt/radarr:/config"
       - "/mnt/unionfs/Media/Movies:/movies"
       - "{{nzbget.downloads}}:/downloads/nzbget"
-      - "{{rutorrent.downloads}}:/downloads/rutorrent"
+      - "{{deluge.downloads}}:/downloads/deluge"
       - "/mnt:/mnt"
       - "/opt/scripts:/scripts"
     networks:

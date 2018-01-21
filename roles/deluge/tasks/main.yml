@@ -67,7 +67,7 @@
       PUID: "{{uid.stdout}}"
       PGID: "{{gid.stdout}}"
       NAME_SERVERS: 209.222.18.222,37.235.1.174,8.8.8.8,209.222.18.218,37.235.1.177,8.8.4.4
-      VPN_ENABLED: "yes"
+      VPN_ENABLED: "{{deluge.vpn_enabled}}"
       VPN_USER: "{{deluge.vpn_user}}"
       VPN_PASS: "{{deluge.vpn_password}}"
       VPN_PROV: "{{deluge.vpn_provider}}"
@@ -75,9 +75,8 @@
       STRONG_CERTS: "no"
       ENABLE_PRIVOXY: "yes"
       DEBUG: false
-      VPN_ENABLED: {{deluge.vpn_enabled}}
-      VPN_PORT: {{deluge.vpn_port}}
-      VPN_PROTOCOL: {{deluge.vpn_protocol}}
+      VPN_PORT: "{{deluge.vpn_port}}"
+      VPN_PROTOCOL: "{{deluge.vpn_protocol}}"
       VPN_DEVICE_TYPE: tun
       HTTPS_METHOD: noredirect
       VIRTUAL_HOST: "deluge.{{domain}}"

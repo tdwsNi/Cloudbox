@@ -35,11 +35,11 @@ subdomains = {
     'nzbhydra': False,
     'jackett': False,
     'nzbget': False,
-    'rutorrent': False,
+    'deluge': False,
     'plex': True,
     'plexpy': False,
     'plexrequests': False,
-    'organizr': False,
+    'muximux': False,
     'portainer': False
 }
 

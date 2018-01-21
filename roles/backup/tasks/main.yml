@@ -182,7 +182,7 @@
       timeout: 5
 
   - name: "Start containers"
-    shell: 'docker start plexrequests plexpy plex radarr sonarr nzbhydra jackett rutorrent nzbget organizr portainer letsencrypt nginx-proxy'
+    shell: 'docker start plexrequests plexpy plex radarr sonarr nzbhydra jackett deluge nzbget muximux portainer letsencrypt nginx-proxy'
     ignore_errors: yes
 
   - name: "Pushover Message: Started Cloudbox containers."
