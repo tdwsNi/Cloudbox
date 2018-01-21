@@ -27,9 +27,6 @@
 - name: "Set {{deluge.downloads}} owner"
   shell: "chown -R {{user}}:{{user}} {{deluge.downloads}}"
 
-- name: Removing all ovpn files
-  shell: rm -r  /opt/appdata/deluge/vpn/config/openvpn/*.ovpn
-
 - name: Copy default ovpn cert
   template:
     src: "{{deluge.vpn_provider}}/ca.rsa.2048.crt"
