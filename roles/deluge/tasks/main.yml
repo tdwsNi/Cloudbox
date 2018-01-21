@@ -12,6 +12,8 @@
   with_items:
     - /opt/deluge
     - /opt/deluge/vpn
+    - /opt/deluge/vpn/config
+    - /opt/deluge/vpn/config/openvpn
 
 - name: Stop and remove any existing container
   docker_container:
@@ -41,7 +43,7 @@
 
 - name: Copy default ovpn file
   template:
-    src: "{{deluge.vpn_location}}.ovpn"
+    src: "{{deluge.vpn_provider}}/{{deluge.vpn_location}}.ovpn"
     dest: "/opt/deluge/vpn/config/openvpn/{{deluge.vpn_location}}.ovpn"
     force: yes
 

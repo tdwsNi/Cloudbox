@@ -8,7 +8,7 @@
   deluge:
     vpn_enabled: yes
     vpn_provider: pia
-    vpn_location: netherlands
+    vpn_location: Netherlands
     vpn_user: username
     vpn_password: password
     downloads: "/home/{{user}}/downloads/deluge"
