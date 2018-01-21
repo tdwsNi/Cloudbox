@@ -1,0 +1,45 @@
+---
+- name: "Get {{user}} uid"
+  shell: "id -u {{user}}"
+  register: uid
+
+- name: "Get {{user}} gid"
+  shell: "id -g {{user}}"
+  register: gid
+
+- name: Stop and remove any existing container
+  docker_container:
+    name: muximux
+    state: absent
+
+- name: Create muximux directories
+  file: "path={{item}} state=directory mode=0775 owner={{user}} group={{user}}"
+  with_items:
+    - /opt/muximux
+
+- name: Create and start container
+  docker_container:
+    name: muximux
+    image: linuxserver/muximux
+    pull: yes
+    published_ports:
+      - "127.0.0.1:8015:8015"
+    env:
+      APP: "muximux"
+      VERSION: "unstable"
+      BACKUP: "no"
+      PUID: "{{uid.stdout}}"
+      PGID: "{{gid.stdout}}"
+      VIRTUAL_HOST: "muximux.{{domain}}"
+      VIRTUAL_PORT: 8015
+      LETSENCRYPT_HOST: "muximux.{{domain}}"
+      LETSENCRYPT_EMAIL: "{{email}}"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/opt/muximux:/config"
+    restart_policy: always
+    networks:
+      - name: cloudbox
+        aliases:
+          - muximux
+    state: started

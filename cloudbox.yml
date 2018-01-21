@@ -27,6 +27,8 @@
     - { role: plexpy, tags: ['full', 'plex', 'update-plexpy'] }
     - { role: plexrequests, tags: ['full', 'plex', 'update-plexrequests'] }
     - { role: plex_autoscan, tags: ['full', 'plex'] }
+    - { role: muximux, tags: ['full', 'feeder', 'update-muximux'] }
+    - { role: deluge, tags: ['full', 'feeder', 'update-deluge'] }
     - { role: backup, tags: ['backup'] }
     - { role: restore, tags: ['restore'] }
     - { role: lidarr, tags: ['install-lidarr', 'update-lidarr'] }

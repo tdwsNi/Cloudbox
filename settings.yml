@@ -8,6 +8,13 @@
   rutorrent:
     passwd: password321
     downloads: "/home/{{user}}/downloads/rutorrent"
+  deluge:
+    vpn_enabled: yes
+    vpn_provider: pia
+    vpn_location: netherlands
+    vpn_user: username
+    vpn_password: password
+    downloads: "/home/{{user}}/downloads/deluge"
   plex:
     tag: public
     transcodes: "/home/{{user}}/transcodes"

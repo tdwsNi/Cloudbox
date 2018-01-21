@@ -1,0 +1,98 @@
+---
+- name: "Get {{user}} uid"
+  shell: "id -u {{user}}"
+  register: uid
+
+- name: "Get {{user}} gid"
+  shell: "id -g {{user}}"
+  register: gid
+
+- name: Create deluge directories
+  file: "path={{item}} state=directory mode=0775 owner={{user}} group={{user}}"
+  with_items:
+    - /opt/deluge
+    - /opt/deluge/vpn
+
+- name: Stop and remove any existing container
+  docker_container:
+    name: deluge
+    state: absent
+
+- name: Create deluge download directory
+  file: "path={{deluge.downloads}} state=directory mode=0775 owner={{user}} group={{user}}"
+
+- name: "Set {{deluge.downloads}} permissions"
+  shell: "chmod -R 775 {{deluge.downloads}}"
+
+- name: "Set {{deluge.downloads}} owner"
+  shell: "chown -R {{user}}:{{user}} {{deluge.downloads}}"
+
+- name: Removing all ovpn files
+  shell: rm -r  /opt/appdata/deluge/vpn/config/openvpn/*.ovpn
+
+- name: Copy default ovpn cert
+  template:
+    src: "{{deluge.vpn_provider}}/ca.rsa.2048.crt"
+    dest: "/opt/deluge/vpn/config/openvpn/ca.rsa.2048.crt"
+    force: yes
+
+- name: Copy default ovpn pem
+  template:
+    src: "{{deluge.vpn_provider}}/crl.rsa.2048.pem"
+    dest: "/opt/deluge/vpn/config/openvpn/crl.rsa.2048.pem"
+    force: yes
+
+- name: Copy default ovpn file
+  template:
+    src: "{{deluge.vpn_location}}.ovpn"
+    dest: "/opt/deluge/vpn/config/openvpn/{{deluge.vpn_location}}.ovpn"
+    force: yes
+
+- name: Making sure iptable is set
+  shell: /sbin/modprobe iptable_mangle
+
+- name: Deploy Deluge Container
+  docker_container:
+    name: deluge
+    image: binhex/arch-delugevpn
+    pull: yes
+    capabilities:
+      - NET_ADMIN
+    published_ports:
+      - "127.0.0.1:8112:8112"
+      - "127.0.0.1:8118:8118"
+      - "58846:58846"
+      - "58946:58946"
+    env:
+      PUID: "{{uid.stdout}}"
+      PGID: "{{gid.stdout}}"
+      NAME_SERVERS: 209.222.18.222,37.235.1.174,8.8.8.8,209.222.18.218,37.235.1.177,8.8.4.4
+      VPN_ENABLED: "yes"
+      VPN_USER: "{{deluge.vpn_user}}"
+      VPN_PASS: "{{deluge.vpn_password}}"
+      VPN_PROV: "{{deluge.vpn_provider}}"
+      STRICT_PORT_FORWARD: "yes"
+      STRONG_CERTS: "no"
+      ENABLE_PRIVOXY: "yes"
+      DEBUG: false
+      VPN_ENABLED: {{deluge.vpn_enabled}}
+      VPN_PORT: {{deluge.vpn_port}}
+      VPN_PROTOCOL: {{deluge.vpn_protocol}}
+      VPN_DEVICE_TYPE: tun
+      HTTPS_METHOD: noredirect
+      VIRTUAL_HOST: "deluge.{{domain}}"
+      VIRTUAL_PORT: 80
+      LETSENCRYPT_HOST: "deluge.{{domain}}"
+      LETSENCRYPT_EMAIL: "{{email}}"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/opt/deluge:/config"
+      - "{{deluge.downloads}}:/downloads/deluge"
+      - "/mnt:/mnt"
+      - "/opt/scripts/torrent:/scripts"
+    restart_policy: always
+    state: started
+    networks:
+      - name: cloudbox
+        aliases:
+          - deluge
