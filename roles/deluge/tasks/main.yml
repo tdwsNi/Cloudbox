@@ -74,8 +74,6 @@
       STRONG_CERTS: "no"
       ENABLE_PRIVOXY: "yes"
       DEBUG: false
-      VPN_PORT: "{{deluge.vpn_port}}"
-      VPN_PROTOCOL: "{{deluge.vpn_protocol}}"
       VPN_DEVICE_TYPE: tun
       HTTPS_METHOD: noredirect
       VIRTUAL_HOST: "deluge.{{domain}}"
