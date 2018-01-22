@@ -11,9 +11,7 @@
   file: "path={{item}} state=directory mode=0775 owner={{user}} group={{user}}"
   with_items:
     - /opt/deluge
-    - /opt/deluge/vpn
-    - /opt/deluge/vpn/config
-    - /opt/deluge/vpn/config/openvpn
+    - /opt/deluge/openvpn
 
 - name: Stop and remove any existing container
   docker_container:
@@ -32,23 +30,29 @@
 - name: Copy default ovpn cert
   template:
     src: "{{deluge.vpn_provider}}/ca.rsa.2048.crt"
-    dest: "/opt/deluge/vpn/config/openvpn/ca.rsa.2048.crt"
+    dest: "/opt/deluge/openvpn/ca.rsa.2048.crt"
     force: yes
 
 - name: Copy default ovpn pem
   template:
     src: "{{deluge.vpn_provider}}/crl.rsa.2048.pem"
-    dest: "/opt/deluge/vpn/config/openvpn/crl.rsa.2048.pem"
+    dest: "/opt/deluge/openvpn/crl.rsa.2048.pem"
     force: yes
 
 - name: Copy default ovpn file
   template:
     src: "{{deluge.vpn_provider}}/{{deluge.vpn_location}}.ovpn"
-    dest: "/opt/deluge/vpn/config/openvpn/{{deluge.vpn_location}}.ovpn"
+    dest: "/opt/deluge/openvpn/{{deluge.vpn_location}}.ovpn"
     force: yes
 
 - name: Making sure iptable is set
   shell: /sbin/modprobe iptable_mangle
+
+- name: "Set {{deluge.downloads}} permissions"
+  shell: "chmod -R 775 /opt/deluge"
+
+- name: "Set {{deluge.downloads}} owner"
+  shell: "chown -R {{user}}:{{user}} /opt/deluge"
 
 - name: Deploy Deluge Container
   docker_container:
@@ -65,19 +69,18 @@
     env:
       PUID: "{{uid.stdout}}"
       PGID: "{{gid.stdout}}"
-      NAME_SERVERS: 209.222.18.222,37.235.1.174,8.8.8.8,209.222.18.218,37.235.1.177,8.8.4.4
+      NAME_SERVERS: 185.121.177.177,8.8.8.8,169.239.202.202,8.8.4.4
       VPN_ENABLED: "{{deluge.vpn_enabled}}"
       VPN_USER: "{{deluge.vpn_user}}"
       VPN_PASS: "{{deluge.vpn_password}}"
       VPN_PROV: "{{deluge.vpn_provider}}"
+      LAN_NETWORK: "172.18.0.0/16"
       STRICT_PORT_FORWARD: "yes"
-      STRONG_CERTS: "no"
-      ENABLE_PRIVOXY: "yes"
-      DEBUG: false
-      VPN_DEVICE_TYPE: tun
-      HTTPS_METHOD: noredirect
+      STRONG_CERTS: "yes"
+      ENABLE_PRIVOXY: "no"
+      DEBUG: "false"
       VIRTUAL_HOST: "deluge.{{domain}}"
-      VIRTUAL_PORT: 80
+      VIRTUAL_PORT: 8112
       LETSENCRYPT_HOST: "deluge.{{domain}}"
       LETSENCRYPT_EMAIL: "{{email}}"
     volumes:
